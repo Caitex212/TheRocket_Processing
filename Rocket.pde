@@ -94,6 +94,7 @@ void drawRocket() {
   
   // --------------------- Legs
   stroke(255);
+  strokeWeight(2);
   line(-3, 20, -15, 40);
   line(3, 20, 15, 40);
   stroke(200);
@@ -102,16 +103,18 @@ void drawRocket() {
   
   // --------------------- Flame
   if (up) {
-    stroke(66, 123, 245);
-    ellipse(0, 30, 3, 20);
-    stroke(235, 239, 247);
-    ellipse(0, 25, 2, 10);
+    strokeWeight(0);
+    fill(66, 123, 245);
+    ellipse(0, 30, 5, 40);
+    fill(235, 239, 247);
+    ellipse(0, 25, 3, 30);
   }
   
   // --------------------- Body
   stroke(255);
+  strokeWeight(5);
   fill(255);
-  rect(-3, -25, 6, 50);
+  rect(-2, -25, 4, 50);
   
   // --------------------- Tip
   stroke(200);
