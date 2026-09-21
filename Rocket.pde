@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Random;
 
 float gravityMultiplier = 9.81;
-float rRotForce = 0.001; // Rotational Force
+float rAngForce = 0.001; // Angular Force
 float rThrForce = 0.1; // Thruster Force
 
 int maxCraters = 20;
@@ -13,13 +13,14 @@ PVector gravityOrigin = new PVector(960,540); // Center of gravity
 PVector rPos = new PVector(960, 100); // Position
 PVector rVel = new PVector(0, 0); // Velocity
 
-float rRot = 0; // Orientation/Rotation
-float rRotVel = 0; // Rotaional Velocity
+float rAng = 0; // Angle
+float rAngVel = 0; // Angular Velocity
 
 boolean left = false;
 boolean right = false;
 boolean up = false;
 
+float pSize = 100; // Radius
 float pRotation = 0;
 float pRotationSpeed = 0.001;
 
@@ -36,7 +37,7 @@ void draw() {
   drawPlanet();
   
   // -------------------- Debugging
-  String dText = "Velocity: " + String.valueOf(rVel.mag()) + "\nRoational Velocity: " + String.valueOf(rRotVel);
+  String dText = "Velocity: " + String.valueOf(rVel.mag()) + "\nRoational Velocity: " + String.valueOf(rAngVel);
   textSize(30);
   fill(255);
   text(dText, 0, 30);
@@ -68,7 +69,7 @@ void rocketLogic() {
   
   //Thruster calculation
   if (up) {
-    movementVector.add(new PVector(0, -rThrForce).rotate(rRot));
+    movementVector.add(new PVector(0, -rThrForce).rotate(rAng));
   }
   
   rVel.add(movementVector);  
@@ -77,20 +78,20 @@ void rocketLogic() {
   if (left && right) {
   }
   else if (left) {
-    rRotVel -= rRotForce;
-    if (rRotVel < -1) rRotVel = -1;
+    rAngVel -= rAngForce;
+    if (rAngVel < -1) rAngVel = -1;
   }
   else if (right) {
-    rRotVel += rRotForce;
-    if (rRotVel > 1) rRotVel = 1;
+    rAngVel += rAngForce;
+    if (rAngVel > 1) rAngVel = 1;
   }
-  rRot += rRotVel;
+  rAng += rAngVel;
 }
 
 void drawRocket() {
   pushMatrix();
   translate(rPos.x, rPos.y);
-  rotate(rRot);
+  rotate(rAng);
   
   // --------------------- Legs
   stroke(255);
@@ -134,7 +135,7 @@ void drawPlanet() {
   // -------------------- Surface
   fill(224, 151, 67);
   stroke(0);
-  ellipse(0, 0, 200, 200);
+  ellipse(0, 0, pSize * 2, pSize * 2);
   
   // -------------------- Crater
   fill(133, 100, 62);
