@@ -1,5 +1,6 @@
 float gravityMultiplier = 9.81;
 float rRotForce = 0.001; // Rotational Force
+float rThrForce = 0.1; // Thruster Force
 
 PVector gravityOrigin = new PVector(960,540); // Center of gravity
 
@@ -47,20 +48,27 @@ void draw() {
 }
 
 void rocketLogic() {
-  // Gravity Calculation
+  // Gravity calculation
   PVector movementVector = PVector.sub(gravityOrigin, rPos).normalize();
   movementVector.mult(gravityMultiplier * 0.003);
-  rVel.add(movementVector);
   
+  //Thruster calculation
+  if (up) {
+    movementVector.add(new PVector(0, -rThrForce).rotate(rRot));
+  }
+  
+  rVel.add(movementVector);  
   rPos.add(rVel);
   
   if (left && right) {
   }
   else if (left) {
     rRotVel -= rRotForce;
+    if (rRotVel < -1) rRotVel = -1;
   }
   else if (right) {
     rRotVel += rRotForce;
+    if (rRotVel > 1) rRotVel = 1;
   }
   rRot += rRotVel;
 }
@@ -70,10 +78,36 @@ void drawRocket() {
   translate(rPos.x, rPos.y);
   rotate(rRot);
   
+  // --------------------- Legs
   stroke(255);
+  line(-3, 20, -15, 40);
+  line(3, 20, 15, 40);
+  stroke(200);
+  line(20, 40, 15, 40);
+  line(-20, 40, -15, 40);
+  // ---------------------
+  
+  // --------------------- Flame
+  if (up) {
+    stroke(66, 123, 245);
+    ellipse(0, 30, 3, 20);
+    stroke(235, 239, 247);
+    ellipse(0, 25, 2, 10);
+  }
+  // ---------------------
+  
+  // --------------------- Body
+  stroke(255);
+  fill(255);
+  rect(-3, -25, 6, 50);
+  // ---------------------
+  
+  // --------------------- Tip
+  stroke(200);
+  fill(200);
   strokeWeight(5);
-  line(0, 0, 0, -20);
-  line(0, 0, 0, 20);
+  rect(-3, -25, 6, 10);
+  // ---------------------
   
   popMatrix();
 }
