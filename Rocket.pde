@@ -1,7 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 float gravityMultiplier = 9.81;
 float rAngForce = 0.001; // Angular Force
 float rThrForce = 0.1; // Thruster Force
@@ -67,13 +63,40 @@ void rocketLogic() {
   PVector movementVector = PVector.sub(gravityOrigin, rPos).normalize();
   movementVector.mult(gravityMultiplier * 0.003);
   
-  //Thruster calculation
+  // Thruster calculation
   if (up) {
     movementVector.add(new PVector(0, -rThrForce).rotate(rAng));
   }
   
   rVel.add(movementVector);  
   rPos.add(rVel);
+  
+  // Collision
+  float closestDist = Float.MAX_VALUE;
+  PVector closestCord = new PVector(0,0);
+  PVector[] collisionPoints = new PVector[] {
+    new PVector(-15, 40),
+    new PVector(15, 40),
+    new PVector(0, -25),
+  };
+  
+  for (PVector point : collisionPoints) {
+    PVector globalPos = localToWorld(point);
+    PVector distanceVec = PVector.sub(globalPos, gravityOrigin);
+    float distance = distanceVec.mag();
+    
+    if (distance < closestDist) {
+      closestDist = distance;
+      closestCord = globalPos;
+    }
+  }
+  
+  if (closestDist < pSize) {
+    PVector normal = PVector.sub(closestCord, gravityOrigin).normalize();
+    float penetrationDistance = pSize - closestDist;
+    rPos.add(normal.mult(penetrationDistance));
+    rVel =  new PVector(0, 0);
+  }
   
   if (left && right) {
   }
@@ -168,4 +191,10 @@ void keyReleased() {
     if (keyCode == RIGHT) right = false;
     if (keyCode == UP)    up = false;
   }
+}
+
+PVector localToWorld(PVector local) { // translates local rocket coordinates to global coordinates
+  PVector rotated = local.copy().rotate(rAng); // applies angle
+  rotated.add(rPos); // applying position
+  return rotated;
 }
