@@ -38,7 +38,7 @@ void draw() {
   drawPlanet();
 
   // -------------------- Debugging
-  String dText = "Velocity: " + String.valueOf(rVel.mag()) + "\nRoational Velocity: " + String.valueOf(rAngVel);
+  String dText = "Velocity: " + String.valueOf(rVel.mag()) + "\nAngular Velocity: " + String.valueOf(rAngVel);
   textSize(30);
   fill(255);
   text(dText, 0, 30);
@@ -187,7 +187,7 @@ void rocketLogic() {
     
     float frictionMagnitude = -tangentVelocity / frictionDenominator;
     
-    // Coulomb friction
+    // Coulomb friction (same as Friction, not vibecode free)
     float normalImpulse = max(
       abs(impulseMagnitude),
       abs(movementVector.dot(normal)) * mass
