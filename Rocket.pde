@@ -1,4 +1,3 @@
-float gravityMultiplier = 9.81;
 float rAngForce = 0.001; // Angular Force
 float rThrForce = 0.1; // Thruster Force
 
@@ -11,7 +10,7 @@ float inverseInertia = 1.0 / momentOfInertia;
 
 PVector gravityOrigin = new PVector(960, 540); // Center of gravity
 
-PVector rPos = new PVector(960, 100); // Position
+PVector rPos = gravityOrigin.copy(); // Position
 PVector rVel = new PVector(0, 0); // Velocity
 
 float rAng = 0; // Angle
@@ -21,9 +20,10 @@ boolean left = false;
 boolean right = false;
 boolean up = false;
 
-float pSize = 200; // Radius
+float pSize = 300; // Planet Radius (also scales gravity)
 float pRotation = 0;
 float pRotationSpeed = 0.001;
+float gravityMultiplier = 0.02943 * (pSize / 200);
 
 void setup() {
   size(1920, 1080);
@@ -42,6 +42,11 @@ void draw() {
   textSize(30);
   fill(255);
   text(dText, 0, 30);
+  
+  stroke(90);
+  strokeWeight(3);
+  PVector tip = new PVector(rPos.x + (rVel.x * 15), rPos.y + (rVel.y * 15));
+  line(rPos.x, rPos.y, tip.x, tip.y);
 
   // -------------------- Input Display
   String inputs = "";
@@ -66,7 +71,7 @@ void draw() {
 void rocketLogic() {
   // Gravity calculation
   PVector movementVector = PVector.sub(gravityOrigin, rPos).normalize();
-  movementVector.mult(gravityMultiplier * 0.003);
+  movementVector.mult(gravityMultiplier);
 
   // Thruster calculation
   if (up) {
@@ -157,7 +162,7 @@ void rocketLogic() {
 
     rAngVel += angularImpulse * inverseInertia;
     
-    // Friction
+    // Friction (highly influenced by AI, I underestimated the math)
     PVector tangent = new PVector(-normal.y, normal.x); // Vector going to the sie of the surface
 
     // Recalculate contact velocity after collision impulse
@@ -251,6 +256,7 @@ void drawPlanet() {
   pushMatrix();
   translate(gravityOrigin.x, gravityOrigin.y);
   rotate(pRotation);
+  float scale = pSize / 100.0;
 
   // -------------------- Surface
   fill(224, 151, 67);
@@ -260,17 +266,17 @@ void drawPlanet() {
   // -------------------- Crater
   fill(133, 100, 62);
   stroke(133, 100, 62);
-  ellipse(-70, -20, 18, 18);
-  ellipse(-35, -68, 22, 22);
-  ellipse(52, -55, 24, 24);
-  ellipse(76, -15, 14, 14);
-  ellipse(55, 22, 20, 20);
-  ellipse(25, 58, 18, 18);
-  ellipse(-82, 5, 12, 12);
-  ellipse(-45, 5, 20, 20);
-  ellipse(35, -20, 18, 18);
-  ellipse(5, 25, 22, 22);
-
+  ellipse(-70 * scale, -20 * scale, 18 * scale, 18 * scale);
+  ellipse(-35 * scale, -68 * scale, 22 * scale, 22 * scale);
+  ellipse(52 * scale, -55 * scale, 24 * scale, 24 * scale);
+  ellipse(76 * scale, -15 * scale, 14 * scale, 14 * scale);
+  ellipse(55 * scale, 22 * scale, 20 * scale, 20 * scale);
+  ellipse(25 * scale, 58 * scale, 18 * scale, 18 * scale);
+  ellipse(-82 * scale, 5 * scale, 12 * scale, 12 * scale);
+  ellipse(-45 * scale, 5 * scale, 20 * scale, 20 * scale);
+  ellipse(35 * scale, -20 * scale, 18 * scale, 18 * scale);
+  ellipse(5 * scale, 25 * scale, 22 * scale, 22 * scale);
+  
   popMatrix();
 }
 
