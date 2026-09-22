@@ -115,6 +115,10 @@ void rocketLogic() {
   }
 
   if (closestDist < pSize) {
+    fill(255, 0, 0);
+    stroke(255, 0, 0);
+    ellipse(closestCord.x, closestCord.y, 5, 5); // debugging visualizer
+    
     PVector normal = PVector.sub(closestCord, gravityOrigin).normalize();
     float penetrationDistance = pSize - closestDist;
 
@@ -260,7 +264,7 @@ void drawPlanet() {
 
   // -------------------- Surface
   fill(224, 151, 67);
-  stroke(0);
+  strokeWeight(0);
   ellipse(0, 0, pSize * 2, pSize * 2);
 
   // -------------------- Crater
