@@ -2,8 +2,6 @@ float gravityMultiplier = 9.81;
 float rAngForce = 0.001; // Angular Force
 float rThrForce = 0.1; // Thruster Force
 
-int maxCraters = 20;
-
 PVector gravityOrigin = new PVector(960,540); // Center of gravity
 
 PVector rPos = new PVector(960, 100); // Position
