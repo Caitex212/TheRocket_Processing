@@ -1,2 +1,3 @@
 # The Rocket (Processing)
-> No Vibecode here
+> (Almost) No Vibecode here
+> Collision and Friction is partially vibecode
